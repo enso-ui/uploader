@@ -1,5 +1,5 @@
 <template>
-    <form class="is-marginless"
+    <form class="m-0"
         @submit.prevent>
         <core-uploader v-bind="$attrs"
             ref="uploader">
@@ -11,24 +11,16 @@
                     v-on="inputEvents">
                 <slot name="control"
                     :control-events="controlEvents">
-                    <a :class="['file', {'is-small': isSmall}, {'is-large': isLarge}]"
+                    <a :class="['button', 'uploader-button', {'is-small': isSmall},
+                        {'is-large': isLarge}, {'is-rounded': isRounded}]"
                         v-on="controlEvents">
-                        <span :class="['file-cta', {'is-rounded': isRounded}]"
+                        <span class="file-label"
                             v-if="label">
-                            <span class="file-icon"
-                                v-if="!manual || files">
-                                <fa icon="upload"/>
-                            </span>
-                            <span class="file-label">
-                                {{ label }}
-                            </span>
+                            {{ label }}
                         </span>
-                        <span class="button"
-                            v-else>
-                            <span class="icon"
-                                v-if="!manual || files">
-                                <fa icon="upload"/>
-                            </span>
+                        <span class="icon"
+                            v-if="!manual || files">
+                            <fa :icon="faUpload"/>
                         </span>
                     </a>
                 </slot>
@@ -39,16 +31,17 @@
 
 <script>
 import { FontAwesomeIcon as Fa } from '@fortawesome/vue-fontawesome';
-import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import CoreUploader from '../renderless/CoreUploader.vue';
-
-library.add(faUpload);
 
 export default {
     name: 'Uploader',
 
     components: { CoreUploader, Fa },
+
+    data: () => ({
+        faUpload,
+    }),
 
     props: {
         isLarge: {
@@ -74,7 +67,17 @@ export default {
 </script>
 
 <style lang="scss">
-    .file-cta.is-rounded {
-        border-radius: 290486px;
+.uploader-button {
+    background-color: var(--bulma-scheme-main);
+    border: 1px solid var(--bulma-input-border-color);
+    box-shadow: none;
+    color: var(--bulma-text-strong);
+
+    &:hover,
+    &:focus {
+        background-color: var(--bulma-scheme-main-ter);
+        border-color: var(--bulma-input-hover-border-color);
+        color: var(--bulma-text-strong);
     }
+}
 </style>
