@@ -112,15 +112,14 @@ export default {
             }).catch(error => {
                 this.reset();
                 this.$emit('upload-error');
-                const { data, status } = error.response;
 
-                if (status === 422) {
-                    Object.keys(data.errors)
-                        .forEach(key => this.toastr.warning(data.errors[key][0]));
+                if (error?.response?.status !== 422) {
+                    this.errorHandler(error);
                     return;
                 }
 
-                this.errorHandler(error);
+                Object.keys(error.response.data.errors)
+                    .forEach(key => this.toastr.warning(error.response.data.errors[key][0]));
             });
         },
         setFormData() {
